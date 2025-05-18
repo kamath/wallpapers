@@ -3,12 +3,12 @@
 import { useEffect, useRef, useCallback, useMemo } from "react";
 
 const N = 3;
-const CANVAS_WIDTH = 150;
-const CANVAS_HEIGHT = 150;
+const CANVAS_WIDTH = 100;
+const CANVAS_HEIGHT = 100;
 
 // Snake properties
-const SNAKE_MAX_LENGTH = 30;
-const SNAKE_SPEED = 5;
+const SNAKE_MAX_LENGTH = 100;
+const SNAKE_SPEED = 2;
 const INITIAL_POINTS = [{ x: 50, y: 50 }];
 const STROKE_WIDTH = 2;
 
@@ -127,7 +127,7 @@ export default function Home() {
   const pointsRef = useRef<{ x: number; y: number }[]>([...INITIAL_POINTS]);
   const angleRef = useRef<number>(Math.random() * 2 * Math.PI);
   const animationFrameIdRef = useRef<number | null>(null);
-  const transformationRef = useRef<keyof typeof transformations>("p1");
+  const transformationRef = useRef<keyof typeof transformations>("p4m");
 
   const transformations = useMemo(
     () => ({
@@ -438,7 +438,7 @@ export default function Home() {
   }, [transformations]); // No dependencies, uses refs and constants only
 
   useEffect(() => {
-    transformationRef.current = "p1";
+    transformationRef.current = "p4m";
     // Initialize contexts for the grid canvases
     canvasRefs.current.forEach((canvas, i) => {
       if (canvas && !ctxRefs.current[i]) {
@@ -481,62 +481,63 @@ export default function Home() {
   return (
     <div className="lg:flex h-screen justify-center items-center gap-8">
       <div className="flex flex-col items-center justify-center h-screen">
-        <div className="flex gap-4 mb-4">
-          {Object.keys(transformations).map((key) => (
-            <label key={key} className="flex items-center gap-2">
-              <input
-                type="radio"
-                name="transformation"
-                value={key}
-                onChange={(e) => {
-                  transformationRef.current = e.target
-                    .value as keyof typeof transformations;
-                }}
-              />
-              {key}
-            </label>
-          ))}
-        </div>
-        <div
-          id="canvas-grid-container"
-          style={{
-            display: "inline-grid",
-            gridTemplateColumns: `repeat(${N}, auto)`,
-          }}
-        >
-          {Array.from({ length: N * N }).map((_, i) => (
-            <div
-              key={i}
-              className="grid-item border border-black/80 text-3xl text-center w-fit"
-            >
+        <div className="flex flex-col md:flex-row items-center justify-center gap-6">
+          <div className="flex items-center">
+            <div className="flex flex-col items-center justify-center gap-4">
+              <h2 className="text-2xl font-bold">Root Motif:</h2>
               <canvas
                 className="border-2 border-gray-300"
-                id={`canvas${i}`}
+                id="demo"
                 width={CANVAS_WIDTH}
                 height={CANVAS_HEIGHT}
                 ref={(el) => {
                   if (el) {
-                    canvasRefs.current[i] = el;
+                    demoCanvasRef.current = el;
                   }
                 }}
               ></canvas>
+              <select
+                className="mb-4 p-2 border border-gray-300 rounded"
+                onChange={(e) => {
+                  transformationRef.current = e.target
+                    .value as keyof typeof transformations;
+                }}
+                defaultValue={transformationRef.current}
+              >
+                {Object.keys(transformations).map((key) => (
+                  <option key={key} value={key}>
+                    {key}
+                  </option>
+                ))}
+              </select>
             </div>
-          ))}
-        </div>
-      </div>
-      <div className="flex items-center bg-blue-100">
-        <div>
-          <canvas
-            className="border-2 border-gray-300"
-            id="demo"
-            width="150"
-            height="150"
-            ref={(el) => {
-              if (el) {
-                demoCanvasRef.current = el;
-              }
+          </div>
+          <div
+            id="canvas-grid-container"
+            style={{
+              display: "inline-grid",
+              gridTemplateColumns: `repeat(${N}, auto)`,
             }}
-          ></canvas>
+          >
+            {Array.from({ length: N * N }).map((_, i) => (
+              <div
+                key={i}
+                className="grid-item border border-black/80 text-3xl text-center w-fit"
+              >
+                <canvas
+                  className="border-2 border-gray-300"
+                  id={`canvas${i}`}
+                  width={CANVAS_WIDTH}
+                  height={CANVAS_HEIGHT}
+                  ref={(el) => {
+                    if (el) {
+                      canvasRefs.current[i] = el;
+                    }
+                  }}
+                ></canvas>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </div>
