@@ -91,13 +91,13 @@ const rotateN = (
 };
 
 // Glide reflection across x, shifted by dy
-const glideX = (
-  points: { x: number; y: number }[],
-  x: number = CENTER_X,
-  dy: number = CENTER_Y
-) => {
-  return translate(reflect(points, x, 0, x, CANVAS_HEIGHT), x, dy);
-};
+// const glideX = (
+//   points: { x: number; y: number }[],
+//   x: number = CENTER_X,
+//   dy: number = CENTER_Y
+// ) => {
+//   return translate(reflect(points, x, 0, x, CANVAS_HEIGHT), x, dy);
+// };
 
 // Glide reflection across y, shifted by dx
 const glideY = (
