@@ -32,7 +32,32 @@ export default function Home() {
           see what happens when you apply different wallpaper patterns to a
           dynamic motif.
         </p>
-        <p>The motif is a simple square with a</p>
+        <p>
+          The motif is a simple square that moves in a random snake-like path.
+          The transformations are applied to the square as specified, then
+          tessellated across the plane.
+        </p>
+        <h3 className="text-lg font-bold text-gray-800">Learn more</h3>
+        <ul>
+          <li>
+            <a
+              href="https://www.integral-domain.org/lwilliams/WallpaperGroups/p1.php"
+              className="text-blue-500"
+            >
+              Click here
+            </a>{" "}
+            for a detailed explanation of the wallpaper patterns.
+          </li>
+          <li>
+            <a
+              href="https://math.hws.edu/eck/js/symmetry/symmetry-info.html"
+              className="text-blue-500"
+            >
+              Click here
+            </a>{" "}
+            for the inspiration for this project.
+          </li>
+        </ul>
       </div>
     </div>
   );

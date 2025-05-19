@@ -89,23 +89,13 @@ const rotateN = (
     rotate(points, (i * Math.PI * 2) / n, x, y)
   );
 };
-
-// Glide reflection across x, shifted by dy
-// const glideX = (
-//   points: { x: number; y: number }[],
-//   x: number = CENTER_X,
-//   dy: number = CENTER_Y
-// ) => {
-//   return translate(reflect(points, x, 0, x, CANVAS_HEIGHT), x, dy);
-// };
-
 // Glide reflection across y, shifted by dx
 const glideY = (
   points: { x: number; y: number }[],
   y: number = CENTER_Y,
   dx: number = CENTER_X
 ) => {
-  return translate(reflect(points, 0, y, CANVAS_WIDTH, y), dx, y);
+  return translate(reflect(points, 0, y, CANVAS_WIDTH, y), dx, 0);
 };
 
 const transformations: Record<
@@ -170,10 +160,6 @@ const transformations: Record<
     points,
     // y = 0
     glideY(points, 0, CENTER_X),
-    // y = CENTER_Y
-    // glideY(points, CENTER_Y, 0),
-    // // y = CANVAS_HEIGHT
-    // glideY(points, CANVAS_HEIGHT, CENTER_X),
   ],
 
   // cm: Reflection across horizontal line + glide reflection
@@ -249,122 +235,59 @@ const transformations: Record<
 
   // pgg: Two perpendicular glide reflections
   pgg: (points) => [
-    // 1. The original motif
+    // 1. Original motif
     points,
-
-    // 2. 180-degree rotation about the cell center
-    ...rotateN(points, 2, CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2),
-
-    // 3. Glide reflection along horizontal axis y = CANVAS_HEIGHT / 2, then shift half-cell in x
-    translate(
-      reflect(points, 0, CANVAS_HEIGHT / 2, CANVAS_WIDTH, CANVAS_HEIGHT / 2),
-      CANVAS_WIDTH / 2,
-      0
-    ),
-
-    // 4. Glide reflection along vertical axis x = CANVAS_WIDTH / 2, then shift half-cell in y
-    translate(
-      reflect(points, CANVAS_WIDTH / 2, 0, CANVAS_WIDTH / 2, CANVAS_HEIGHT),
-      0,
-      CANVAS_HEIGHT / 2
+    // Rotate about halfway between top corner and center
+    rotate(points, Math.PI, CENTER_X / 2, CENTER_Y / 2),
+    // Glide reflection (horizontal), then shift, then rotate 180°
+    glideY(points, CANVAS_HEIGHT / 2, CENTER_X),
+    // Rotate the glide reflection
+    rotate(
+      glideY(points, CANVAS_HEIGHT / 2, CENTER_X),
+      Math.PI,
+      CENTER_X / 2,
+      CENTER_Y / 2
     ),
   ],
 
   // p4m: Square with mirror reflections
-  p4m: (points: { x: number; y: number }[]) => {
-    const centerX = CANVAS_WIDTH / 2;
-    const centerY = CANVAS_HEIGHT / 2;
-    const rotate90 = points.map((p) => ({
-      x: centerY - p.y + centerX,
-      y: p.x - centerX + centerY,
-    }));
-    const rotate180 = points.map((p) => ({
-      x: centerX + (centerX - p.x),
-      y: centerY + (centerY - p.y),
-    }));
-    const rotate270 = points.map((p) => ({
-      x: p.y - centerY + centerX,
-      y: centerX - p.x + centerY,
-    }));
-    const mirror = points.map((p) => ({
-      x: CANVAS_WIDTH - p.x,
-      y: p.y,
-    }));
-    const mirror90 = rotate90.map((p) => ({
-      x: CANVAS_WIDTH - p.x,
-      y: p.y,
-    }));
-    const mirror180 = rotate180.map((p) => ({
-      x: CANVAS_WIDTH - p.x,
-      y: p.y,
-    }));
-    const mirror270 = rotate270.map((p) => ({
-      x: CANVAS_WIDTH - p.x,
-      y: p.y,
-    }));
-    return [
-      points,
-      rotate90,
-      rotate180,
-      rotate270,
-      mirror,
-      mirror90,
-      mirror180,
-      mirror270,
-    ];
-  },
+  p4m: (points: { x: number; y: number }[]) => [
+    points,
+    rotate(points, Math.PI / 2),
+    rotate(points, Math.PI),
+    rotate(points, (Math.PI * 3) / 2),
+    reflect(points, CENTER_X, 0, CENTER_X, CANVAS_HEIGHT),
+    reflect(rotate(points, Math.PI / 2), CENTER_X, 0, CENTER_X, CANVAS_HEIGHT),
+    reflect(points, 0, CENTER_Y, CANVAS_WIDTH, CENTER_Y),
+    reflect(points, CANVAS_WIDTH, 0, 0, CANVAS_HEIGHT),
+    reflect(points, 0, CANVAS_HEIGHT, CANVAS_WIDTH, 0),
+  ],
 
   // p4g: Square with glide reflections
   p4g: (points: { x: number; y: number }[]) => {
-    const centerX = CANVAS_WIDTH / 2;
-    const centerY = CANVAS_HEIGHT / 2;
-
-    // Base rotations
-    const rotate90 = points.map((p) => ({
-      x: centerX + (centerY - p.y),
-      y: centerY - (centerX - p.x),
-    }));
-    const rotate180 = points.map((p) => ({
-      x: centerX + (centerX - p.x),
-      y: centerY + (centerY - p.y),
-    }));
-    const rotate270 = points.map((p) => ({
-      x: centerX - (centerY - p.y),
-      y: centerY + (centerX - p.x),
-    }));
-
-    // Glide reflections
-    const glide = points.map((p) => ({
-      x: CANVAS_WIDTH - p.x,
-      y: p.y + CANVAS_HEIGHT / 2,
-    }));
-    const glide90 = rotate90.map((p) => ({
-      x: CANVAS_WIDTH - p.x,
-      y: p.y + CANVAS_HEIGHT / 2,
-    }));
-    const glide180 = rotate180.map((p) => ({
-      x: CANVAS_WIDTH - p.x,
-      y: p.y + CANVAS_HEIGHT / 2,
-    }));
-    const glide270 = rotate270.map((p) => ({
-      x: CANVAS_WIDTH - p.x,
-      y: p.y + CANVAS_HEIGHT / 2,
-    }));
-
-    return [
-      points,
-      rotate90,
-      rotate180,
-      rotate270,
-      glide,
-      glide90,
-      glide180,
-      glide270,
-    ];
+    const smallRotation = rotateN(points, 4);
+    const glide = glideY(points, CENTER_Y / 2, CENTER_X);
+    return [points, ...smallRotation, glide, ...rotateN(glide, 4)];
   },
 };
 
-const DEFAULT_TRANSFORMATION: keyof typeof transformations = "pg";
+const transformationDescriptions: Record<keyof typeof transformations, string> =
+  {
+    p1: "Basic translation only",
+    p2: "180° rotation pattern",
+    p4: "90° rotation pattern",
+    pm: "Vertical reflection pattern",
+    pg: "Glide reflection pattern",
+    cm: "Horizontal reflection with glide",
+    cmm: "Two perpendicular reflections",
+    pmm: "Two perpendicular mirrors",
+    pmg: "Glide and vertical reflection",
+    pgg: "Two perpendicular glides",
+    p4m: "Square with mirrors",
+    p4g: "Square with glides",
+  };
+
+const DEFAULT_TRANSFORMATION: keyof typeof transformations = "p4g";
 
 // Helper function to draw a single continuous segment of the snake
 function drawSegment(
@@ -629,7 +552,13 @@ export default function Geometry() {
           >
             {Object.keys(transformations).map((key) => (
               <option key={key} value={key}>
-                {key}
+                {key} (
+                {
+                  transformationDescriptions[
+                    key as keyof typeof transformations
+                  ]
+                }
+                )
               </option>
             ))}
           </select>
