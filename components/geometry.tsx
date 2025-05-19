@@ -287,7 +287,7 @@ const transformationDescriptions: Record<keyof typeof transformations, string> =
     p4g: "Square with glides",
   };
 
-const DEFAULT_TRANSFORMATION: keyof typeof transformations = "p4g";
+const DEFAULT_TRANSFORMATION: keyof typeof transformations = "p1";
 
 // Helper function to draw a single continuous segment of the snake
 function drawSegment(
