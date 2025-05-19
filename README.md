@@ -1,36 +1,52 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Wallpaper Patterns
 
-## Getting Started
+An interactive visualization of the 17 wallpaper groups using dynamic motifs. This project demonstrates how different symmetry patterns can be applied to a moving shape to create intricate tessellations.
 
-First, run the development server:
+## What are Wallpaper Groups?
+
+Wallpaper groups are mathematical classifications of repeating patterns that can tile a plane. There are exactly 17 different ways to arrange identical shapes to completely cover a plane while maintaining perfect symmetry. These patterns are created by applying combinations of:
+
+- Translations
+- Rotations
+- Reflections
+- Glide reflections
+
+## Features
+
+- Interactive visualization of all 17 wallpaper patterns
+- Dynamic "snake-like" motif that moves randomly
+- Real-time pattern generation
+- Play/pause controls
+- Pattern selection dropdown
+
+## Setup
+
+1. Clone the repository:
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone https://github.com/kamath/wallpapers.git
+cd wallpapers
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. Install dependencies:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+pnpm install
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+3. Run the Next.js development server:
+
+```bash
+pnpm dev
+```
+
+4. Open [http://localhost:3000](http://localhost:3000) in your browser
 
 ## Learn More
 
-To learn more about Next.js, take a look at the following resources:
+- [Detailed explanation of wallpaper patterns](https://www.integral-domain.org/lwilliams/WallpaperGroups/p1.php)
+- [Interactive wallpaper group visualization](https://math.hws.edu/eck/js/symmetry/wallpaper.html)
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## License
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+MIT
