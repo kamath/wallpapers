@@ -476,7 +476,6 @@ export default function Geometry() {
   }, [paused]); // Add paused to dependency array
 
   useEffect(() => {
-    transformationRef.current = DEFAULT_TRANSFORMATION;
     // Initialize contexts for the grid canvases
     canvasRefs.current.forEach((canvas, i) => {
       if (canvas && !ctxRefs.current[i]) {
