@@ -527,67 +527,64 @@ export default function Geometry() {
   }, [gameLoop, isInitialized]); // gameLoop is stable due to useCallback([])
 
   return (
-    <div className="flex flex-col md:flex-row items-center justify-center gap-6">
-      <div className="flex items-center">
-        <div className="flex flex-col items-center justify-center gap-4">
-          <h2 className="text-2xl font-bold">Root Motif:</h2>
-          <canvas
-            className="border-2 border-gray-300"
-            id="demo"
-            width={CANVAS_WIDTH}
-            height={CANVAS_HEIGHT}
-            ref={(el) => {
-              if (el) {
-                demoCanvasRef.current = el;
-              }
-            }}
-          ></canvas>
-          <select
-            className="mb-4 p-2 border border-gray-300 rounded"
-            onChange={(e) => {
-              transformationRef.current = e.target
-                .value as keyof typeof transformations;
-            }}
-            defaultValue={transformationRef.current}
-          >
-            {Object.keys(transformations).map((key) => (
-              <option key={key} value={key}>
-                {key} (
-                {
-                  transformationDescriptions[
-                    key as keyof typeof transformations
-                  ]
-                }
-                )
-              </option>
-            ))}
-          </select>
-        </div>
-      </div>
-      <div
-        id="canvas-grid-container"
-        style={{
-          display: "inline-grid",
-          gridTemplateColumns: `repeat(${N}, auto)`,
-        }}
-      >
-        {Array.from({ length: N * N }).map((_, i) => (
-          <div key={i} className="grid-item text-3xl text-center w-fit">
+    <div className="flex flex-col items-center justify-center gap-6">
+      <div className="flex flex-col md:flex-row items-center justify-center gap-6">
+        <div className="flex items-center">
+          <div className="flex flex-col items-center justify-center gap-4">
+            <h2 className="text-2xl font-bold">Root Motif:</h2>
             <canvas
-              className="border-[0.5px] border-gray-300"
-              id={`canvas${i}`}
+              className="border-2 border-gray-300"
+              id="demo"
               width={CANVAS_WIDTH}
               height={CANVAS_HEIGHT}
               ref={(el) => {
                 if (el) {
-                  canvasRefs.current[i] = el;
+                  demoCanvasRef.current = el;
                 }
               }}
             ></canvas>
           </div>
-        ))}
+        </div>
+        <div
+          id="canvas-grid-container"
+          style={{
+            display: "inline-grid",
+            gridTemplateColumns: `repeat(${N}, auto)`,
+          }}
+        >
+          {Array.from({ length: N * N }).map((_, i) => (
+            <div key={i} className="grid-item text-3xl text-center w-fit">
+              <canvas
+                className="border-[0.5px] border-gray-300"
+                id={`canvas${i}`}
+                width={CANVAS_WIDTH}
+                height={CANVAS_HEIGHT}
+                ref={(el) => {
+                  if (el) {
+                    canvasRefs.current[i] = el;
+                  }
+                }}
+              ></canvas>
+            </div>
+          ))}
+        </div>
       </div>
-      <div className="flex flex-col items-center justify-center gap-4">
+      <div className="flex flex-col items-center justify-center gap-2">
+        <select
+          className="p-2 border border-gray-300 rounded"
+          onChange={(e) => {
+            transformationRef.current = e.target
+              .value as keyof typeof transformations;
+          }}
+          defaultValue={transformationRef.current}
+        >
+          {Object.keys(transformations).map((key) => (
+            <option key={key} value={key}>
+              {key} (
+              {transformationDescriptions[key as keyof typeof transformations]})
+            </option>
+          ))}
+        </select>
         <button
           className="bg-blue-500 text-white px-4 py-2 rounded"
           onClick={() => setPaused(!paused)}

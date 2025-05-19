@@ -3,6 +3,12 @@ import Geometry from "@/components/geometry";
 export default function Home() {
   return (
     <div className="flex flex-col items-center justify-center py-4 gap-12">
+      <h1 className="text-2xl font-bold text-gray-800 text-center">
+        Github:{" "}
+        <a href="https://github.com/kamath/wallpaper" className="text-blue-500">
+          kamath/wallpapers
+        </a>
+      </h1>
       <Geometry />
       <div className="max-w-[450px] text-center flex flex-col gap-2 text-gray-600 text-left">
         <h1 className="text-2xl font-bold text-gray-800 text-center">
