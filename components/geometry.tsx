@@ -574,7 +574,7 @@ export default function Geometry() {
         {Array.from({ length: N * N }).map((_, i) => (
           <div key={i} className="grid-item text-3xl text-center w-fit">
             <canvas
-              className="border-1 border-gray-300"
+              className="border-[0.5px] border-gray-300"
               id={`canvas${i}`}
               width={CANVAS_WIDTH}
               height={CANVAS_HEIGHT}
@@ -588,7 +588,10 @@ export default function Geometry() {
         ))}
       </div>
       <div className="flex flex-col items-center justify-center gap-4">
-        <button onClick={() => setPaused(!paused)}>
+        <button
+          className="bg-blue-500 text-white px-4 py-2 rounded"
+          onClick={() => setPaused(!paused)}
+        >
           {paused ? "Play" : "Pause"}
         </button>
         <p className="text-sm text-gray-500">{paused ? "Paused" : "Playing"}</p>
